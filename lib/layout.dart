@@ -6,13 +6,6 @@ import 'pages/home/home.dart';
 import 'pages/search/search.dart';
 
 class Layout {
-  static final pages = [
-    HomePage.tag,
-    AboutPage.tag,
-    CreatePage.tag,
-    SearchPage.tag
-  ];
-
   static FloatingActionButton _floatingActionButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
@@ -56,7 +49,7 @@ class Layout {
             title: Text("Home"),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed(pages[0]);
+              Navigator.of(context).pushReplacementNamed(HomePage.tag);
             },
           ),
           ListTile(
