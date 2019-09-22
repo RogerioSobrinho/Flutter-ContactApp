@@ -25,6 +25,9 @@ dependencies:
   cupertino_icons: ^0.1.2
   sqflite: #lasted version
   intl: #lasted version
+  url_launcher: #lasted version
+  font_awesome_flutter: #lasted version
+  share: 
 dev_dependencies:
   flutter_test:
     sdk: flutter

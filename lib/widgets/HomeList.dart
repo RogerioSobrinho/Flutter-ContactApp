@@ -1,3 +1,4 @@
+import 'package:contacts/pages/contact/contact-edit.dart';
 import 'package:contacts/pages/home/homeBloc.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,14 @@ class _HomeListState extends State<HomeList> {
               ' ' +
               (item['lastName'].toString().isNotEmpty ? item['lastName'] : '')),
           subtitle: Text(item['phoneNumber']),
-          onTap: () {},
+          onTap: () {
+            ContactEditPage.contact = item;
+            Navigator.of(context).pushNamed(ContactEditPage.tag);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => ContactEditPage()),
+            // );
+          },
         );
       },
     );

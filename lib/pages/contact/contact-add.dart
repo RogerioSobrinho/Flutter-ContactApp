@@ -1,4 +1,3 @@
-import 'package:contacts/layout.dart';
 import 'package:contacts/models/contact.dart';
 import 'package:contacts/pages/home/home.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ class _ContactAddPageState extends State<ContactAddPage> {
   final TextEditingController _cPhoneNumber = TextEditingController();
   final TextEditingController _cEmail = TextEditingController();
   final TextEditingController _cWork = TextEditingController();
-  // final TextEditingController _cQtd = TextEditingController(text: '1');
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +87,6 @@ class _ContactAddPageState extends State<ContactAddPage> {
           shrinkWrap: true,
           padding: EdgeInsets.all(20),
           children: <Widget>[
-            // SizedBox(height: 10),
             Text('First Name'),
             inputFirstName,
             Text('Last Name'),
@@ -139,77 +136,5 @@ class _ContactAddPageState extends State<ContactAddPage> {
       ),
       body: content,
     );
-
-    // return Scaffold(
-    //     appBar: AppBar(
-    //       backgroundColor: Colors.grey,
-    //       leading: IconButton(
-    //         icon: Icon(Icons.close),
-    //         onPressed: () {
-    //           Navigator.pop(context);
-    //         },
-    //       ),
-    //       title: Text("Add contact"),
-    //       actions: <Widget>[
-    //         IconButton(
-    //           icon: Text("Save"),
-    //           onPressed: () {},
-    //         )
-    //       ],
-    //     ),
-    //     body: new ListView(
-    //       children: <Widget>[
-    //         ListTile(
-    //           leading: Icon(Icons.account_box),
-    //           title: new TextFormField(
-    //             keyboardType: TextInputType.text,
-    //             decoration: new InputDecoration(
-    //               hintText: 'Rogerio',
-    //               labelText: 'First name',
-    //             ),
-    //           ),
-    //         ),
-    //         ListTile(
-    //           leading: IgnorePointer(),
-    //           title: new TextFormField(
-    //             keyboardType: TextInputType.text,
-    //             decoration: new InputDecoration(
-    //               hintText: 'Rogerio Sobrinho',
-    //               labelText: 'Last name',
-    //             ),
-    //           ),
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.phone),
-    //           title: new TextFormField(
-    //             keyboardType: TextInputType.phone,
-    //             decoration: new InputDecoration(
-    //               hintText: '+55 11123456789',
-    //               labelText: 'Phone number',
-    //             ),
-    //           ),
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.email),
-    //           title: new TextFormField(
-    //             keyboardType: TextInputType.phone,
-    //             decoration: new InputDecoration(
-    //               hintText: 'example@example.com',
-    //               labelText: 'E-mail',
-    //             ),
-    //           ),
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.work),
-    //           title: new TextFormField(
-    //             keyboardType: TextInputType.phone,
-    //             decoration: new InputDecoration(
-    //               hintText: 'Google',
-    //               labelText: 'Work',
-    //             ),
-    //           ),
-    //         ),
-    //       ],
-    //     ));
   }
 }

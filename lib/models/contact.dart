@@ -60,7 +60,7 @@ class ModelContact extends AbstractModel {
   Future<bool> update(Map<String, dynamic> values, where) async {
     Database db = await this.getDb();
     int rows = await db
-        .update('contacts', values, where: 'pk_item = ?', whereArgs: [where]);
+        .update('contacts', values, where: 'id = ?', whereArgs: [where]);
     return (rows != 0);
   }
 }
