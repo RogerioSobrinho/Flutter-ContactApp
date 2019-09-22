@@ -13,7 +13,6 @@ class HomeList extends StatefulWidget {
 class _HomeListState extends State<HomeList> {
   @override
   Widget build(BuildContext context) {
-    // Item default
     if (widget.items.length == 0) {
       return ListView(
         children: <Widget>[
@@ -32,8 +31,9 @@ class _HomeListState extends State<HomeList> {
           leading: CircleAvatar(
             child: Text(item['firstName'].substring(0, 1).toUpperCase()),
           ),
-          title: Text(
-              item['firstName'] + (item['lastName'] ? item['lastName'] : '')),
+          title: Text(item['firstName'] +
+              ' ' +
+              (item['lastName'].toString().isNotEmpty ? item['lastName'] : '')),
           subtitle: Text(item['phoneNumber']),
           onTap: () {},
         );
@@ -41,31 +41,3 @@ class _HomeListState extends State<HomeList> {
     );
   }
 }
-
-// Widget _myListView(BuildContext context) {
-//   // final titles = [
-//   //   'Rogerio Sobrinho',
-//   //   'Jhonny',
-//   //   'Pedro',
-//   //   'Marcio',
-//   //   'Adriano',
-//   //   'Ana',
-//   //   'Maria',
-//   //   'Jessica',
-//   //   'Kamila'
-//   // ];
-
-//   return ListView.builder(
-//     itemCount: titles.length,
-//     itemBuilder: (context, index) {
-//       return ListTile(
-//         leading: CircleAvatar(
-//           child: Text(titles[index].substring(0, 1).toUpperCase()),
-//         ),
-//         title: Text(titles[index]),
-//         subtitle: Text("+55 11123456789"),
-//         onTap: () {},
-//       );
-//     },
-//   );
-// }
