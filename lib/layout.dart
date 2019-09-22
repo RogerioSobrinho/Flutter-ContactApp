@@ -30,7 +30,10 @@ class Layout {
     items.add(IconButton(
       icon: Icon(Icons.search),
       onPressed: () {
-        Navigator.of(context).pushReplacementNamed(pages[3]);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SearchPage()),
+        );
       },
     ));
     return items;
