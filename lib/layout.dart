@@ -15,6 +15,7 @@ class Layout {
         );
       },
       child: Icon(Icons.add),
+      backgroundColor: primary(),
     );
   }
 

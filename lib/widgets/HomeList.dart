@@ -2,6 +2,8 @@ import 'package:contacts/pages/contact/contact-edit.dart';
 import 'package:contacts/pages/home/homeBloc.dart';
 import 'package:flutter/material.dart';
 
+import '../layout.dart';
+
 class HomeList extends StatefulWidget {
   final List<Map> items;
   final HomeListBloc listaBloc;
@@ -31,6 +33,7 @@ class _HomeListState extends State<HomeList> {
         return ListTile(
           leading: CircleAvatar(
             child: Text(item['firstName'].substring(0, 1).toUpperCase()),
+            backgroundColor: Layout.primary(),
           ),
           title: Text(item['firstName'] +
               ' ' +

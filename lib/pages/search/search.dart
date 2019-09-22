@@ -1,3 +1,4 @@
+import 'package:contacts/layout.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -11,6 +12,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Layout.primary(),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

@@ -23,9 +23,8 @@ class _ContactAddPageState extends State<ContactAddPage> {
       autofocus: true,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: 'First name',
-          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+        labelText: 'First Name',
+      ),
       validator: (value) {
         if (value.isEmpty) {
           return 'Required';
@@ -39,9 +38,8 @@ class _ContactAddPageState extends State<ContactAddPage> {
       autofocus: false,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: 'Last name',
-          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+        labelText: 'Last Name',
+      ),
     );
 
     final inputPhoneNumber = TextFormField(
@@ -49,9 +47,8 @@ class _ContactAddPageState extends State<ContactAddPage> {
       autofocus: false,
       keyboardType: TextInputType.phone,
       decoration: InputDecoration(
-          hintText: 'Phone Number',
-          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+        labelText: 'Phone Number',
+      ),
       validator: (value) {
         if (value.isEmpty) {
           return 'Required';
@@ -65,9 +62,8 @@ class _ContactAddPageState extends State<ContactAddPage> {
       autofocus: false,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-          hintText: 'Last name',
-          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+        labelText: 'Email',
+      ),
     );
 
     final inputWork = TextFormField(
@@ -75,9 +71,8 @@ class _ContactAddPageState extends State<ContactAddPage> {
       autofocus: false,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: 'Last name',
-          contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
+        labelText: 'Work',
+      ),
     );
 
     Container content = Container(
@@ -87,15 +82,10 @@ class _ContactAddPageState extends State<ContactAddPage> {
           shrinkWrap: true,
           padding: EdgeInsets.all(20),
           children: <Widget>[
-            Text('First Name'),
             inputFirstName,
-            Text('Last Name'),
             inputLastName,
-            Text('Phone Number'),
             inputPhoneNumber,
-            Text('Email'),
             inputEmail,
-            Text('Work'),
             inputWork,
           ],
         ),
