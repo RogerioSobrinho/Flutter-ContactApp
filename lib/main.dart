@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'pages/contact/contact-edit.dart';
 import 'pages/home/home.dart';
-import 'pages/create/create.dart';
+import 'pages/contact/contact-add.dart';
 import 'pages/search/search.dart';
 import 'pages/about/about.dart';
 
@@ -12,7 +13,8 @@ class MyApp extends StatelessWidget {
     HomePage.tag: (context) => HomePage(),
     AboutPage.tag: (context) => AboutPage(),
     SearchPage.tag: (context) => SearchPage(),
-    CreatePage.tag: (context) => CreatePage(),
+    ContactAddPage.tag: (context) => ContactAddPage(),
+    ContactEditPage.tag: (context) => ContactEditPage(),
   };
 
   @override

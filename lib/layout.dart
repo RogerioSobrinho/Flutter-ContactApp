@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'pages/about/about.dart';
-import 'pages/create/create.dart';
+import 'pages/contact/contact-add.dart';
 import 'pages/home/home.dart';
 import 'pages/search/search.dart';
 
@@ -11,7 +11,7 @@ class Layout {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CreatePage()),
+          MaterialPageRoute(builder: (context) => ContactAddPage()),
         );
       },
       child: Icon(Icons.add),

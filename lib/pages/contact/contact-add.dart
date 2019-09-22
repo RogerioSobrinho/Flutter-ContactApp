@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CreatePage extends StatefulWidget {
-  static String tag = 'create-page';
+class ContactAddPage extends StatefulWidget {
+  static String tag = 'add-page';
   @override
-  _CreatePageState createState() => _CreatePageState();
+  _ContactAddPageState createState() => _ContactAddPageState();
 }
 
-class _CreatePageState extends State<CreatePage> {
+class _ContactAddPageState extends State<ContactAddPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
