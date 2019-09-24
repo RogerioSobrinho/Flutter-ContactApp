@@ -5,11 +5,12 @@ List<String> dbCreate = [
   // tb lista
   """CREATE TABLE contacts (
     id INTEGER PRIMARY KEY,
-    firstName TEXT,
-    lastName TEXT,
+    name TEXT,
+    nickName TEXT,
+    work TEXT,
     phoneNumber TEXT,
     email TEXT,
-    work TEXT,
+    webSite TEXT,
     created TEXT
   )""",
 ];
