@@ -51,8 +51,7 @@ class ModelContact extends AbstractModel {
   @override
   Future<List<Map>> list() async {
     Database db = await this.getDb();
-    List<Map> items =
-        await db.rawQuery("SELECT * FROM contacts ORDER BY firstName");
+    List<Map> items = await db.rawQuery("SELECT * FROM contacts ORDER BY name");
     return items;
   }
 
