@@ -14,13 +14,23 @@ class HomeList extends StatefulWidget {
 }
 
 class _HomeListState extends State<HomeList> {
+  Offset _tapPosition;
+
+  void _onTapDown(TapDownDetails details) {
+    _tapPosition = details.globalPosition;
+    print(_tapPosition);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject();
+
     if (widget.items.length == 0) {
-      return ListView(
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
-            child: Text('No registered contacts'),
+            child: Text('Nenhum contato cadastrado'),
           ),
         ],
       );
@@ -30,23 +40,42 @@ class _HomeListState extends State<HomeList> {
       itemCount: widget.items.length,
       itemBuilder: (BuildContext context, int index) {
         Map item = widget.items[index];
-        return ListTile(
-          leading: CircleAvatar(
-            child: Text(item['firstName'].substring(0, 1).toUpperCase()),
-            backgroundColor: Layout.primary(),
-          ),
-          title: Text(item['firstName'] +
-              ' ' +
-              (item['lastName'].toString().isNotEmpty ? item['lastName'] : '')),
-          subtitle: Text(item['phoneNumber']),
-          onTap: () {
-            ContactEditPage.contact = item;
-            Navigator.of(context).pushNamed(ContactEditPage.tag);
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => ContactEditPage()),
-            // );
+        return GestureDetector(
+          onTapDown: _onTapDown,
+          onLongPress: () {
+            showMenu(
+              context: context,
+              items: [
+                PopupMenuItem(
+                  child: Text("Editar"),
+                ),
+                PopupMenuItem(
+                  child: Text("Excluir"),
+                ),
+              ],
+              position: RelativeRect.fromRect(
+                _tapPosition & Size(40, 40), // smaller rect, the touch area
+                Offset.zero & overlay.size, // Bigger rect, the entire screen
+              ),
+            );
           },
+          child: ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+            leading: CircleAvatar(
+              child: Text(item['name'].substring(0, 1).toUpperCase()),
+              backgroundColor: Colors.blue,
+            ),
+            title: Text(
+              item['name'],
+              style:
+                  TextStyle(color: Layout.dark(), fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(item['phoneNumber']),
+            onTap: () {
+              ContactEditPage.contact = item;
+              Navigator.of(context).pushNamed(ContactEditPage.tag);
+            },
+          ),
         );
       },
     );
