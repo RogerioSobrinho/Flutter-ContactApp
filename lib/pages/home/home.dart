@@ -34,6 +34,6 @@ class _HomePageState extends State<HomePage> {
           }
         });
 
-    return Layout.getContent(context, content, true, true);
+    return Layout.getContent(context, content, true);
   }
 }
