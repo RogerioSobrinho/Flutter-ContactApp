@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
-
-import 'pages/about/about.dart';
 import 'pages/contact/contact-add.dart';
-import 'pages/home/home.dart';
 import 'pages/search/search.dart';
 
 class Layout {
-  static FloatingActionButton _floatingActionButton(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ContactAddPage()),
-        );
-      },
-      child: Icon(Icons.add),
-      backgroundColor: primary(),
-    );
-  }
-
   static List<Widget> _getActions(BuildContext context) {
     List<Widget> items = List<Widget>();
+
+    items.add(IconButton(
+        icon: Icon(Icons.add),
+        color: dark(),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ContactAddPage()),
+          );
+        }));
+
     items.add(IconButton(
       icon: Icon(Icons.search),
+      color: dark(),
       onPressed: () {
         Navigator.push(
           context,
@@ -30,67 +26,52 @@ class Layout {
         );
       },
     ));
+
+    items.add(IconButton(
+      icon: Icon(Icons.more_vert),
+      color: dark(),
+      onPressed: () {},
+    ));
+
     return items;
   }
 
-  static Drawer _getDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.all(0),
-        children: [
-          UserAccountsDrawerHeader(
-            accountEmail: Text("rogerioa.sobrinho@gmail.com"),
-            accountName: Text("Rogerio Sobrinho"),
-            currentAccountPicture: CircleAvatar(
-              child: Text("R"),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text("Home"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed(HomePage.tag);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.info),
-            title: Text("About Us"),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AboutPage()),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   static Scaffold getContent(BuildContext context, content,
-      [bool showButtonSearch = false, bool showButtonAdd = false]) {
+      [bool showButtonBar = false]) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary(),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
+        backgroundColor: new Color(0xFFf5f5f5),
+        elevation: 0.5,
+        title: Text(
+          "Telefone",
+          style: TextStyle(
+            color: dark(),
+            fontWeight: FontWeight.bold,
           ),
         ),
-        title: Text("Contacts"),
-        actions: showButtonSearch ? _getActions(context) : [],
+        actions: showButtonBar ? _getActions(context) : [],
       ),
       body: new Builder(
         builder: (BuildContext context) {
           return content;
         },
       ),
-      floatingActionButton:
-          showButtonAdd ? _floatingActionButton(context) : null,
-      drawer: _getDrawer(context),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.timer),
+            title: Text('Recentes'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            title: Text('Contatos'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            title: Text('Favoritos'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -99,16 +80,7 @@ class Layout {
   static Color secondary([double opacity = 1]) =>
       Color.fromRGBO(150, 150, 150, opacity);
   static Color light([double opacity = 1]) =>
-      Color.fromRGBO(242, 234, 228, opacity);
+      Color.fromRGBO(242, 246, 247, opacity);
   static Color dark([double opacity = 1]) =>
       Color.fromRGBO(51, 51, 51, opacity);
-
-  static Color danger([double opacity = 1]) =>
-      Color.fromRGBO(217, 74, 74, opacity);
-  static Color success([double opacity = 1]) =>
-      Color.fromRGBO(5, 100, 50, opacity);
-  static Color info([double opacity = 1]) =>
-      Color.fromRGBO(100, 150, 255, opacity);
-  static Color warning([double opacity = 1]) =>
-      Color.fromRGBO(166, 134, 0, opacity);
 }
