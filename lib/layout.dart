@@ -40,7 +40,7 @@ class Layout {
       [bool showButtonBar = false]) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: new Color(0xFFf5f5f5),
+        backgroundColor: primary(),
         elevation: 0.5,
         title: Text(
           "Telefone",
@@ -57,6 +57,7 @@ class Layout {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: primary(),
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.timer),
@@ -76,9 +77,9 @@ class Layout {
   }
 
   static Color primary([double opacity = 1]) =>
-      Color.fromRGBO(62, 63, 89, opacity);
+      Color.fromRGBO(255, 255, 255, opacity);
   static Color secondary([double opacity = 1]) =>
-      Color.fromRGBO(150, 150, 150, opacity);
+      Color.fromRGBO(0, 0, 0, opacity);
   static Color light([double opacity = 1]) =>
       Color.fromRGBO(242, 246, 247, opacity);
   static Color dark([double opacity = 1]) =>
