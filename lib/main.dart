@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Contacts',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.black,
+        accentColor: Colors.black,
+        hintColor: Colors.black,
       ),
       home: HomePage(),
       routes: routes,
