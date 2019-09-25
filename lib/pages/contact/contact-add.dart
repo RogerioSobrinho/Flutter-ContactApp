@@ -1,3 +1,4 @@
+import 'package:contacts/layout.dart';
 import 'package:contacts/models/contact.dart';
 import 'package:contacts/pages/home/home.dart';
 import 'package:flutter/material.dart';
@@ -100,6 +101,7 @@ class _ContactAddPageState extends State<ContactAddPage> {
           width: 120.0,
           height: 120.0,
           child: CircleAvatar(
+            backgroundColor: Layout.secondary(),
             child: Icon(
               Icons.camera_alt,
             ),
@@ -147,8 +149,8 @@ class _ContactAddPageState extends State<ContactAddPage> {
               padding: EdgeInsets.all(20),
               child: RaisedButton(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 80.0),
-                color: Colors.blue,
-                textColor: Colors.white,
+                color: Layout.secondary(),
+                textColor: Layout.primary(),
                 shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(30.0),
                 ),
