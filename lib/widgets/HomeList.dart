@@ -59,22 +59,28 @@ class _HomeListState extends State<HomeList> {
               ),
             );
           },
-          child: ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-            leading: CircleAvatar(
-              child: Text(item['name'].substring(0, 1).toUpperCase()),
-              backgroundColor: Colors.blue,
+          child: Container(
+            decoration: BoxDecoration(color: Layout.primary()),
+            width: MediaQuery.of(context).size.width,
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+              leading: CircleAvatar(
+                child: Text(item['name'].substring(0, 1).toUpperCase()),
+                backgroundColor: Layout.secondary(),
+              ),
+              title: Text(
+                item['name'],
+                style: TextStyle(
+                  color: Layout.dark(),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              subtitle: Text(item['phoneNumber']),
+              onTap: () {
+                ContactEditPage.contact = item;
+                Navigator.of(context).pushNamed(ContactEditPage.tag);
+              },
             ),
-            title: Text(
-              item['name'],
-              style:
-                  TextStyle(color: Layout.dark(), fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(item['phoneNumber']),
-            onTap: () {
-              ContactEditPage.contact = item;
-              Navigator.of(context).pushNamed(ContactEditPage.tag);
-            },
           ),
         );
       },
