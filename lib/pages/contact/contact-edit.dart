@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../layout.dart';
+
 class ContactEditPage extends StatefulWidget {
   static String tag = 'edit-page';
   static Map contact;
@@ -62,179 +64,273 @@ class _ContactEditPageState extends State<ContactEditPage> {
   @override
   Widget build(BuildContext context) {
     final phoneNumber = ContactEditPage.contact['phoneNumber'];
-    final inputName = TextFormField(
-      controller: _cName,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: 'Nome',
-        hintText: 'Nome',
-        icon: Icon(Icons.person),
-      ),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Obrigatório';
-        }
-        return null;
-      },
-    );
 
-    final inputNickName = TextFormField(
-      controller: _cNickName,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: 'Apelido',
-        hintText: 'Apelido',
-        icon: Icon(Icons.person),
-      ),
-    );
+    // final inputName = TextField(
+    //   controller: _cName,
+    //   decoration: InputDecoration(
+    //     labelText: 'Nome',
+    //     hintText: 'Nome',
+    //     icon: Icon(Icons.person),
+    //   ),
+    // );
 
-    final inputWork = TextFormField(
-      controller: _cWork,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: 'Trabalho',
-        hintText: 'Trabalho',
-        icon: Icon(Icons.work),
-      ),
-    );
+    // final inputNickName = TextFormField(
+    //   controller: _cNickName,
+    //   keyboardType: TextInputType.text,
+    //   decoration: InputDecoration(
+    //     labelText: 'Apelido',
+    //     hintText: 'Apelido',
+    //     icon: Icon(Icons.person),
+    //   ),
+    // // );
+    // final inputWork = Text(ContactEditPage.contact['work']);
+    // final inputPhoneNumber = Text(ContactEditPage.contact['phoneNumber']);
+    // final inputEmail = Text(ContactEditPage.contact['email']);
+    // final inputWebSite = Text(ContactEditPage.contact['webSite']);
 
-    final inputPhoneNumber = TextFormField(
-      controller: _cPhoneNumber,
-      keyboardType: TextInputType.phone,
-      decoration: InputDecoration(
-        labelText: 'Telefone',
-        hintText: 'Telefone',
-        icon: Icon(Icons.phone),
-      ),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Obrigatório';
-        }
-        return null;
-      },
-    );
-
-    final inputEmail = TextFormField(
-      controller: _cEmail,
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        labelText: 'E-mail',
-        hintText: 'E-mail',
-        icon: Icon(Icons.email),
-      ),
-    );
-
-    final inputWebSite = TextFormField(
-      controller: _cWebSite,
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        labelText: 'Site da Web',
-        hintText: 'Site da Web',
-        icon: Icon(Icons.web),
-      ),
-    );
-
-    Column content = Column(
+    final picture = Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(top: 35, left: 10, right: 10),
-                decoration: BoxDecoration(color: Colors.blue),
-                width: MediaQuery.of(context).size.width,
-                height: (MediaQuery.of(context).size.height * 0.30),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.star),
-                          color: Colors.white,
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.more_vert),
-                          color: Colors.white,
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          ContactEditPage.contact['name'],
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-        Expanded(
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              padding: EdgeInsets.all(20),
-              children: <Widget>[
-                inputName,
-                inputNickName,
-                inputWork,
-                inputPhoneNumber,
-                inputEmail,
-                inputWebSite,
-              ],
+        Container(
+          width: 120.0,
+          height: 120.0,
+          child: CircleAvatar(
+            child: Icon(
+              Icons.camera_alt,
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(20),
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 80.0),
-                color: Colors.blue,
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                child: Text("Salvar"),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    ModelContact contact = ModelContact();
-                    contact.insert({
-                      'name': _cName.text,
-                      'nickName': _cNickName.text,
-                      'work': _cWork.text,
-                      'phoneNumber': _cPhoneNumber.text,
-                      'email': _cEmail.text,
-                      'webSite': _cWebSite.text,
-                      'created': DateTime.now().toString()
-                    }).then((saved) {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacementNamed(HomePage.tag);
-                    });
-                  }
-                },
-              ),
-            ),
-          ],
-        )
       ],
     );
 
+    Scaffold content = Scaffold(
+      appBar: AppBar(
+        backgroundColor: Layout.primary(),
+        elevation: 0,
+        leading: IconButton(
+          color: Layout.dark(),
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.star),
+            color: Layout.dark(),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            color: Layout.dark(),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              picture,
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                ContactEditPage.contact['name'],
+                style: TextStyle(
+                  color: Layout.dark(),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Icon(Icons.phone),
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      "Telefone",
+                      style: TextStyle(color: Color(0xFF333333)),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text(ContactEditPage.contact['phoneNumber']),
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    child: Icon(Icons.person),
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text(
+                      "Apelido",
+                      style: TextStyle(color: Color(0xFF333333)),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text(ContactEditPage.contact['name']),
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    child: Icon(Icons.person),
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text(
+                      "Apelido",
+                      style: TextStyle(color: Color(0xFF333333)),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Text(ContactEditPage.contact['name']),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+      // Row(
+      //   children: <Widget>[
+      //     Expanded(
+      //       child: Container(
+      //         decoration: BoxDecoration(color: Colors.blue),
+      //         width: MediaQuery.of(context).size.width,
+      //         height: (MediaQuery.of(context).size.height * 0.30),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Row(
+      //               mainAxisAlignment: MainAxisAlignment.end,
+      //               crossAxisAlignment: CrossAxisAlignment.start,
+      //               children: <Widget>[
+      //                 IconButton(
+      //                   icon: Icon(Icons.star),
+      //                   color: Colors.white,
+      //                   onPressed: () {},
+      //                 ),
+      //                 IconButton(
+      //                   icon: Icon(Icons.more_vert),
+      //                   color: Colors.white,
+      //                   onPressed: () {},
+      //                 ),
+      //               ],
+      //             ),
+      //             picture,
+      //             Row(
+      //               mainAxisAlignment: MainAxisAlignment.center,
+      //               crossAxisAlignment: CrossAxisAlignment.center,
+      //               children: <Widget>[
+      //                 Text(
+      //                   ContactEditPage.contact['name'],
+      //                   style: TextStyle(
+      //                     color: Colors.white,
+      //                     fontWeight: FontWeight.bold,
+      //                     fontSize: 18,
+      //                   ),
+      //                   maxLines: 1,
+      //                   overflow: TextOverflow.ellipsis,
+      //                 ),
+      //               ],
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     )
+      //   ],
+      // ),
+      // Expanded(
+      //   child: Form(
+      //     key: _formKey,
+      //     child: ListView(
+      //       padding: EdgeInsets.all(20),
+      //       children: <Widget>[
+      //         inputName,
+      //         inputNickName,
+      //         inputWork,
+      //         inputPhoneNumber,
+      //         inputEmail,
+      //         inputWebSite,
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   children: <Widget>[
+      //     Container(
+      //       padding: EdgeInsets.all(20),
+      //       child: RaisedButton(
+      //         padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 80.0),
+      //         color: Colors.blue,
+      //         textColor: Colors.white,
+      //         shape: RoundedRectangleBorder(
+      //           borderRadius: new BorderRadius.circular(30.0),
+      //         ),
+      //         child: Text("Salvar"),
+      //         onPressed: () {
+      //           if (_formKey.currentState.validate()) {
+      //             ModelContact contact = ModelContact();
+      //             contact.insert({
+      //               'name': _cName.text,
+      //               'nickName': _cNickName.text,
+      //               'work': _cWork.text,
+      //               'phoneNumber': _cPhoneNumber.text,
+      //               'email': _cEmail.text,
+      //               'webSite': _cWebSite.text,
+      //               'created': DateTime.now().toString()
+      //             }).then((saved) {
+      //               Navigator.of(context).pop();
+      //               Navigator.of(context).pushReplacementNamed(HomePage.tag);
+      //             });
+      //           }
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      // )
+    );
     // Container content = Column(
     //   child: Form(
     //     key: _formKey,
