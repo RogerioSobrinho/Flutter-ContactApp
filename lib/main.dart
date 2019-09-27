@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/contact/contact-edit.dart';
+import 'pages/contact/contact-view.dart';
 import 'pages/home/home.dart';
 import 'pages/contact/contact-add.dart';
 import 'pages/search/search.dart';
@@ -14,18 +14,15 @@ class MyApp extends StatelessWidget {
     AboutPage.tag: (context) => AboutPage(),
     SearchPage.tag: (context) => SearchPage(),
     ContactAddPage.tag: (context) => ContactAddPage(),
-    ContactEditPage.tag: (context) => ContactEditPage(),
+    ContactViewPage.tag: (context) => ContactViewPage(),
   };
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Contacts',
-      theme: ThemeData(
-        primaryColor: Colors.black,
-        accentColor: Colors.black,
-        hintColor: Colors.black,
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.indigo),
       home: HomePage(),
       routes: routes,
     );
