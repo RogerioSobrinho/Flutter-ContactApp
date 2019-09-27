@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeListBloc listaBloc = HomeListBloc();
+  bool showSearchButton = false;
   @override
   Widget build(BuildContext context) {
     final content = StreamBuilder<List<Map>>(
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
                 print(snapshot.error);
                 return Text('Error: ${snapshot.error}');
               } else {
+                showSearchButton = true;
                 return HomeList(
                   items: snapshot.data,
                   listaBloc: this.listaBloc,
@@ -34,6 +36,6 @@ class _HomePageState extends State<HomePage> {
           }
         });
 
-    return Layout.getContent(context, content, true);
+    return Layout.getContent(context, content, true, showSearchButton);
   }
 }

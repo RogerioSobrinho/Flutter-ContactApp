@@ -12,24 +12,24 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Layout.primary(),
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
+          color: Colors.black,
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text("Search"),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(5),
-        child: new TextFormField(
-          keyboardType: TextInputType.text,
-          decoration: new InputDecoration(
-            labelText: 'Search contact',
+        title: Container(
+          child: new TextFormField(
+            keyboardType: TextInputType.text,
+            decoration: new InputDecoration(
+              labelText: 'Pesquisar contatos',
+            ),
           ),
         ),
       ),
+      body: Container(),
     );
   }
 }

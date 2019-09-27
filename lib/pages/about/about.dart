@@ -31,22 +31,22 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("About Us")),
-      body: ListView(
-        shrinkWrap: true,
+      appBar: AppBar(title: Text("Sobre")),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Center(
             child: Text(
               'Challenge #1',
               style: TextStyle(
                 fontSize: 24,
-                color: Layout.primary(),
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           SizedBox(height: 10),
-          Center(child: Text('App Contacts', style: TextStyle(fontSize: 16))),
+          Center(child: Text('App Contatos', style: TextStyle(fontSize: 16))),
           SizedBox(height: 20),
           Center(
             child: Text('App Flutter by:'),
@@ -56,14 +56,14 @@ class _AboutPageState extends State<AboutPage> {
               "Rogerio Sobrinho",
               style: TextStyle(
                 fontSize: 16,
-                color: Layout.primary(),
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           SizedBox(height: 20),
-          Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 IconButton(
                   icon: Icon(FontAwesomeIcons.github),
