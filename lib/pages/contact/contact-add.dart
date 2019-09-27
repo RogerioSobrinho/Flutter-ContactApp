@@ -2,6 +2,7 @@ import 'package:contacts/layout.dart';
 import 'package:contacts/models/contact.dart';
 import 'package:contacts/pages/home/home.dart';
 import 'package:flutter/material.dart';
+import 'package:masked_text/masked_text.dart';
 
 class ContactAddPage extends StatefulWidget {
   static String tag = 'add-page';
@@ -26,7 +27,6 @@ class _ContactAddPageState extends State<ContactAddPage> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Nome',
-        hintText: 'Nome',
         icon: Icon(Icons.person),
       ),
       validator: (value) {
@@ -42,7 +42,6 @@ class _ContactAddPageState extends State<ContactAddPage> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Apelido',
-        hintText: 'Apelido',
         icon: Icon(Icons.person),
       ),
     );
@@ -52,25 +51,19 @@ class _ContactAddPageState extends State<ContactAddPage> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Trabalho',
-        hintText: 'Trabalho',
         icon: Icon(Icons.work),
       ),
     );
 
-    final inputPhoneNumber = TextFormField(
-      controller: _cPhoneNumber,
+    final inputPhoneNumber = new MaskedTextField(
+      maskedTextFieldController: _cPhoneNumber,
+      mask: "(xxx) xxxxx.xxxx",
+      maxLength: 16,
       keyboardType: TextInputType.phone,
-      decoration: InputDecoration(
-        labelText: 'Telefone',
-        hintText: 'Telefone',
+      inputDecoration: new InputDecoration(
+        labelText: "Telefone",
         icon: Icon(Icons.phone),
       ),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Obrigatório';
-        }
-        return null;
-      },
     );
 
     final inputEmail = TextFormField(
@@ -78,7 +71,6 @@ class _ContactAddPageState extends State<ContactAddPage> {
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: 'E-mail',
-        hintText: 'E-mail',
         icon: Icon(Icons.email),
       ),
     );
@@ -88,7 +80,6 @@ class _ContactAddPageState extends State<ContactAddPage> {
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Site da Web',
-        hintText: 'Site da Web',
         icon: Icon(Icons.web),
       ),
     );
@@ -101,7 +92,6 @@ class _ContactAddPageState extends State<ContactAddPage> {
           width: 120.0,
           height: 120.0,
           child: CircleAvatar(
-            backgroundColor: Layout.secondary(),
             child: Icon(
               Icons.camera_alt,
             ),
@@ -112,19 +102,7 @@ class _ContactAddPageState extends State<ContactAddPage> {
 
     Column content = Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 30, left: 10),
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ),
-          ],
-        ),
+        SizedBox(height: 20),
         picture,
         Expanded(
           child: Form(
@@ -142,44 +120,48 @@ class _ContactAddPageState extends State<ContactAddPage> {
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(20),
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 80.0),
-                color: Layout.secondary(),
-                textColor: Layout.primary(),
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-                child: Text("Salvar"),
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    ModelContact contact = ModelContact();
-                    contact.insert({
-                      'name': _cName.text,
-                      'nickName': _cNickName.text,
-                      'work': _cWork.text,
-                      'phoneNumber': _cPhoneNumber.text,
-                      'email': _cEmail.text,
-                      'webSite': _cWebSite.text,
-                      'created': DateTime.now().toString()
-                    }).then((saved) {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushReplacementNamed(HomePage.tag);
-                    });
-                  }
-                },
-              ),
-            ),
-          ],
-        )
       ],
     );
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed(HomePage.tag);
+          },
+        ),
+        title: Text("Criar novo contato"),
+        actions: <Widget>[
+          Container(
+            width: 80,
+            child: IconButton(
+              icon: Text(
+                'SALVAR',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  ModelContact contact = ModelContact();
+                  contact.insert({
+                    'name': _cName.text,
+                    'nickName': _cNickName.text,
+                    'work': _cWork.text,
+                    'phoneNumber': _cPhoneNumber.text,
+                    'email': _cEmail.text,
+                    'webSite': _cWebSite.text,
+                    'created': DateTime.now().toString()
+                  }).then((saved) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacementNamed(HomePage.tag);
+                  });
+                }
+              },
+            ),
+          )
+        ],
+      ),
       body: content,
     );
   }
