@@ -3,85 +3,49 @@ import 'pages/contact/contact-add.dart';
 import 'pages/search/search.dart';
 
 class Layout {
-  static List<Widget> _getActions(BuildContext context) {
+  static List<Widget> _getActions(BuildContext context, bool search) {
     List<Widget> items = List<Widget>();
 
-    items.add(IconButton(
-        icon: Icon(Icons.add),
-        color: dark(),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ContactAddPage()),
-          );
-        }));
-
-    items.add(IconButton(
-      icon: Icon(Icons.search),
-      color: dark(),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SearchPage()),
-        );
-      },
-    ));
-
-    items.add(IconButton(
-      icon: Icon(Icons.more_vert),
-      color: dark(),
-      onPressed: () {},
-    ));
+    if (search) {
+      items.add(
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SearchPage()),
+            );
+          },
+        ),
+      );
+    }
 
     return items;
   }
 
   static Scaffold getContent(BuildContext context, content,
-      [bool showButtonBar = false]) {
+      [bool showButtonBar = false, bool showSearchButton = false]) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary(),
-        elevation: 0.5,
-        title: Text(
-          "Telefone",
-          style: TextStyle(
-            color: dark(),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: showButtonBar ? _getActions(context) : [],
+        title: Text("Contatos"),
+        actions: showButtonBar ? _getActions(context, showSearchButton) : [],
       ),
       body: new Builder(
         builder: (BuildContext context) {
           return content;
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: primary(),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.timer),
-            title: Text('Recentes'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            title: Text('Contatos'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            title: Text('Favoritos'),
-          ),
-        ],
-      ),
+      floatingActionButton: showButtonBar
+          ? FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContactAddPage()),
+                );
+              },
+            )
+          : null,
     );
   }
-
-  static Color primary([double opacity = 1]) =>
-      Color.fromRGBO(255, 255, 255, opacity);
-  static Color secondary([double opacity = 1]) =>
-      Color.fromRGBO(0, 0, 0, opacity);
-  static Color light([double opacity = 1]) =>
-      Color.fromRGBO(242, 246, 247, opacity);
-  static Color dark([double opacity = 1]) =>
-      Color.fromRGBO(51, 51, 51, opacity);
 }
