@@ -118,7 +118,7 @@ class _HomeListState extends State<HomeList> {
                 style: TextStyle(fontSize: 17),
               ),
               subtitle: item['phoneNumber'].toString().isNotEmpty
-                  ? (item['phoneNumber'])
+                  ? Text(item['phoneNumber'])
                   : null,
               onTap: () {
                 ContactViewPage.contact = item;
