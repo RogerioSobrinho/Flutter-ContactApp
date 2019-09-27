@@ -57,7 +57,7 @@ class _ContactAddPageState extends State<ContactAddPage> {
 
     final inputPhoneNumber = new MaskedTextField(
       maskedTextFieldController: _cPhoneNumber,
-      mask: "(xxx) xxxxx.xxxx",
+      mask: "(xxx) xxxxx-xxxx",
       maxLength: 16,
       keyboardType: TextInputType.phone,
       inputDecoration: new InputDecoration(
