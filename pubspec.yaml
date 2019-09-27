@@ -28,6 +28,7 @@ dependencies:
   url_launcher: #lasted version
   font_awesome_flutter: #lasted version
   share: 
+  masked_text: ^0.0.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
