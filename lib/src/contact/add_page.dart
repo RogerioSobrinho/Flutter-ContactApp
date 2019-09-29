@@ -2,6 +2,7 @@ import 'package:exemplo/src/home/home_bloc.dart';
 import 'package:exemplo/src/home/home_module.dart';
 import 'package:exemplo/src/shared/repository/contact_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:masked_text/masked_text.dart';
 
 import '../app_module.dart';
@@ -30,6 +31,9 @@ class _AddPageState extends State<AddPage> {
       controller: _cName,
       autofocus: true,
       keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(45),
+      ],
       decoration: InputDecoration(
         labelText: 'Nome',
         icon: Icon(Icons.person),
@@ -45,6 +49,9 @@ class _AddPageState extends State<AddPage> {
     TextFormField inputNickName = TextFormField(
       controller: _cNickName,
       keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(25),
+      ],
       decoration: InputDecoration(
         labelText: 'Apelido',
         icon: Icon(Icons.person),
@@ -53,6 +60,9 @@ class _AddPageState extends State<AddPage> {
 
     TextFormField inputWork = TextFormField(
       controller: _cWork,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(45),
+      ],
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Trabalho',
@@ -73,6 +83,9 @@ class _AddPageState extends State<AddPage> {
 
     TextFormField inputEmail = TextFormField(
       controller: _cEmail,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50),
+      ],
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: 'E-mail',
@@ -82,6 +95,9 @@ class _AddPageState extends State<AddPage> {
 
     TextFormField inputWebSite = TextFormField(
       controller: _cWebSite,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50),
+      ],
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Site da Web',
