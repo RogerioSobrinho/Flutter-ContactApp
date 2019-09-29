@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   Widget appBarTitle = new Text("Contatos");
   Icon actionIcon = new Icon(Icons.search);
   Color color = Colors.indigo;
+  bool searching = false;
   final TextEditingController _cSearch = TextEditingController();
 
   @override
@@ -56,7 +57,10 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.indigo,
                               ),
                               autofocus: true,
-                              // onChanged: bloc.getListBySearch(_cSearch.text),
+                              onChanged: (value) {
+                                this.searching = true;
+                                bloc.getListBySearch(value);
+                              },
                               decoration: new InputDecoration(
                                   prefixIcon: new Icon(Icons.search,
                                       color: Colors.indigo),
@@ -65,6 +69,8 @@ class _HomePageState extends State<HomePage> {
                                       new TextStyle(color: Colors.indigo)),
                             );
                           } else {
+                            _cSearch.clear();
+                            this.searching = false;
                             this.actionIcon = new Icon(
                               Icons.search,
                             );
@@ -97,8 +103,21 @@ class _HomePageState extends State<HomePage> {
             print(snapshot.error);
             return Text('Error: ${snapshot.error}');
           } else {
-            bloc.setVisibleButtonSearch(snapshot.data.length > 0);
-            return ContactList(items: snapshot.data);
+            bloc.setVisibleButtonSearch(snapshot.data.length > 0 || searching);
+
+            if (searching && snapshot.data.length == 0) {
+              return Column(
+                children: <Widget>[
+                  Center(
+                      child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text("Nenhum contato localizado"),
+                  )),
+                ],
+              );
+            } else {
+              return ContactList(items: snapshot.data);
+            }
           }
         },
       ),
