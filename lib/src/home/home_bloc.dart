@@ -1,5 +1,4 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:exemplo/src/shared/models/contact.dart';
 import 'package:exemplo/src/shared/repository/contact_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -38,7 +37,7 @@ class HomeBloc extends BlocBase {
   }
 
   getListBySearch(String keywords) async {
-    _listContactController.add(await contactRepository.list());
+    _listContactController.add(await contactRepository.search(keywords));
   }
 
   setVisibleButtonSearch(bool visible) {
@@ -49,11 +48,17 @@ class HomeBloc extends BlocBase {
     _contactController.add(contact);
   }
 
+  deleteContact(id) async {
+    await contactRepository.delete(id);
+    getListContact();
+  }
+
   //dispose will be called automatically by closing its streams
   @override
   void dispose() {
     _listContactController.close();
     _contactController.close();
+    _searchController.close();
     super.dispose();
   }
 }
