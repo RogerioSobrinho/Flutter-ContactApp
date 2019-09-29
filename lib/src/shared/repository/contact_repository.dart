@@ -1,19 +1,20 @@
-import 'package:contacts/models/AbstractModel.dart';
+import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:exemplo/src/shared/repository/abstract_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../application.dart';
+import '../../../application.dart';
 
-class ModelContact extends AbstractModel {
-  static ModelContact _this;
+class ContactRepository extends AbstractRepository with Disposable {
+  static ContactRepository _this;
 
-  factory ModelContact() {
+  factory ContactRepository() {
     if (_this == null) {
-      _this = ModelContact.getInstance();
+      _this = ContactRepository.getInstance();
     }
     return _this;
   }
 
-  ModelContact.getInstance() : super();
+  ContactRepository.getInstance() : super();
 
   @override
   String get dbname => dbName;
@@ -62,4 +63,8 @@ class ModelContact extends AbstractModel {
         .update('contacts', values, where: 'id = ?', whereArgs: [where]);
     return (rows != 0);
   }
+
+  //dispose will be called automatically by closing its streams
+  @override
+  void dispose() {}
 }

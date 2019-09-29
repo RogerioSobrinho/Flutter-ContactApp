@@ -1,16 +1,18 @@
-import 'package:contacts/layout.dart';
-import 'package:contacts/models/contact.dart';
-import 'package:contacts/pages/home/home.dart';
+import 'package:exemplo/src/app_module.dart';
+import 'package:exemplo/src/home/home_bloc.dart';
+import 'package:exemplo/src/home/home_module.dart';
+import 'package:exemplo/src/shared/repository/contact_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
 
-class ContactAddPage extends StatefulWidget {
-  static String tag = 'add-page';
+class EditPage extends StatefulWidget {
+  static String tag = 'edit-page';
+  static Map contact;
   @override
-  _ContactAddPageState createState() => _ContactAddPageState();
+  _EditPageState createState() => _EditPageState();
 }
 
-class _ContactAddPageState extends State<ContactAddPage> {
+class _EditPageState extends State<EditPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _cName = TextEditingController();
   final TextEditingController _cNickName = TextEditingController();
@@ -18,12 +20,13 @@ class _ContactAddPageState extends State<ContactAddPage> {
   final TextEditingController _cPhoneNumber = TextEditingController();
   final TextEditingController _cEmail = TextEditingController();
   final TextEditingController _cWebSite = TextEditingController();
+  final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
+  final contactRepository = AppModule.to.getDependency<ContactRepository>();
 
   @override
   Widget build(BuildContext context) {
-    final inputName = TextFormField(
+    TextFormField inputName = TextFormField(
       controller: _cName,
-      autofocus: true,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Nome',
@@ -37,7 +40,7 @@ class _ContactAddPageState extends State<ContactAddPage> {
       },
     );
 
-    final inputNickName = TextFormField(
+    TextFormField inputNickName = TextFormField(
       controller: _cNickName,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -46,7 +49,7 @@ class _ContactAddPageState extends State<ContactAddPage> {
       ),
     );
 
-    final inputWork = TextFormField(
+    TextFormField inputWork = TextFormField(
       controller: _cWork,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -55,9 +58,9 @@ class _ContactAddPageState extends State<ContactAddPage> {
       ),
     );
 
-    final inputPhoneNumber = new MaskedTextField(
+    MaskedTextField inputPhoneNumber = new MaskedTextField(
       maskedTextFieldController: _cPhoneNumber,
-      mask: "(xxx) xxxxx-xxxx",
+      mask: "(xxx) xxxxx.xxxx",
       maxLength: 16,
       keyboardType: TextInputType.phone,
       inputDecoration: new InputDecoration(
@@ -66,7 +69,7 @@ class _ContactAddPageState extends State<ContactAddPage> {
       ),
     );
 
-    final inputEmail = TextFormField(
+    TextFormField inputEmail = TextFormField(
       controller: _cEmail,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
@@ -75,7 +78,7 @@ class _ContactAddPageState extends State<ContactAddPage> {
       ),
     );
 
-    final inputWebSite = TextFormField(
+    TextFormField inputWebSite = TextFormField(
       controller: _cWebSite,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -84,8 +87,8 @@ class _ContactAddPageState extends State<ContactAddPage> {
       ),
     );
 
-    final picture = Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    Column picture = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
@@ -100,15 +103,16 @@ class _ContactAddPageState extends State<ContactAddPage> {
       ],
     );
 
-    Column content = Column(
-      children: <Widget>[
-        SizedBox(height: 20),
-        picture,
-        Expanded(
-          child: Form(
+    ListView content() {
+      return ListView(
+        padding: EdgeInsets.all(20),
+        children: <Widget>[
+          SizedBox(height: 20),
+          picture,
+          Form(
             key: _formKey,
-            child: ListView(
-              padding: EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 inputName,
                 inputNickName,
@@ -118,10 +122,10 @@ class _ContactAddPageState extends State<ContactAddPage> {
                 inputWebSite,
               ],
             ),
-          ),
-        ),
-      ],
-    );
+          )
+        ],
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -129,10 +133,9 @@ class _ContactAddPageState extends State<ContactAddPage> {
           icon: Icon(Icons.close),
           onPressed: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed(HomePage.tag);
           },
         ),
-        title: Text("Criar novo contato"),
+        title: Text("Editar contato"),
         actions: <Widget>[
           Container(
             width: 80,
@@ -143,18 +146,27 @@ class _ContactAddPageState extends State<ContactAddPage> {
               ),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
-                  ModelContact contact = ModelContact();
-                  contact.insert({
-                    'name': _cName.text,
-                    'nickName': _cNickName.text,
-                    'work': _cWork.text,
-                    'phoneNumber': _cPhoneNumber.text,
-                    'email': _cEmail.text,
-                    'webSite': _cWebSite.text,
-                    'created': DateTime.now().toString()
-                  }).then((saved) {
+                  contactRepository.update(
+                    {
+                      'name': _cName.text,
+                      'nickName': _cNickName.text,
+                      'work': _cWork.text,
+                      'phoneNumber': _cPhoneNumber.text,
+                      'email': _cEmail.text,
+                      'webSite': _cWebSite.text,
+                    },
+                    EditPage.contact['id'],
+                  ).then((saved) {
+                    Map contact = {
+                      'name': _cName.text,
+                      'nickName': _cNickName.text,
+                      'work': _cWork.text,
+                      'phoneNumber': _cPhoneNumber.text,
+                      'email': _cEmail.text,
+                      'webSite': _cWebSite.text,
+                    };
+                    bloc.setContact(contact);
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacementNamed(HomePage.tag);
                   });
                 }
               },
@@ -162,7 +174,28 @@ class _ContactAddPageState extends State<ContactAddPage> {
           )
         ],
       ),
-      body: content,
+      body: StreamBuilder(
+        stream: bloc.contactOut,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return Text('Error: ${snapshot.error}');
+          } else {
+            EditPage.contact = snapshot.data;
+            _cName.text = EditPage.contact['name'];
+            _cNickName.text = EditPage.contact['nickName'];
+            _cWork.text = EditPage.contact['work'];
+            _cPhoneNumber.text = EditPage.contact['phoneNumber'];
+            _cEmail.text = EditPage.contact['email'];
+            _cWebSite.text = EditPage.contact['webSite'];
+            return content();
+          }
+        },
+      ),
     );
   }
 }

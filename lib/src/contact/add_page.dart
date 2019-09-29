@@ -1,17 +1,18 @@
-import 'package:contacts/layout.dart';
-import 'package:contacts/models/contact.dart';
-import 'package:contacts/pages/home/home.dart';
+import 'package:exemplo/src/home/home_bloc.dart';
+import 'package:exemplo/src/home/home_module.dart';
+import 'package:exemplo/src/shared/repository/contact_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
 
-class ContactEditPage extends StatefulWidget {
-  static String tag = 'edit-page';
-  static Map contact;
+import '../app_module.dart';
+
+class AddPage extends StatefulWidget {
+  static String tag = 'add-page';
   @override
-  _ContactEditPageState createState() => _ContactEditPageState();
+  _AddPageState createState() => _AddPageState();
 }
 
-class _ContactEditPageState extends State<ContactEditPage> {
+class _AddPageState extends State<AddPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _cName = TextEditingController();
   final TextEditingController _cNickName = TextEditingController();
@@ -19,21 +20,13 @@ class _ContactEditPageState extends State<ContactEditPage> {
   final TextEditingController _cPhoneNumber = TextEditingController();
   final TextEditingController _cEmail = TextEditingController();
   final TextEditingController _cWebSite = TextEditingController();
-
-  @override
-  void initState() {
-    _cName.text = ContactEditPage.contact['name'];
-    _cNickName.text = ContactEditPage.contact['nickName'];
-    _cWork.text = ContactEditPage.contact['work'];
-    _cPhoneNumber.text = ContactEditPage.contact['phoneNumber'];
-    _cEmail.text = ContactEditPage.contact['email'];
-    _cWebSite.text = ContactEditPage.contact['webSite'];
-    super.initState();
-  }
+  final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
+  final contactRepository =
+      AppModule.to.getDependency<ContactRepository>(); //pega a injeção do BLoC
 
   @override
   Widget build(BuildContext context) {
-    final inputName = TextFormField(
+    TextFormField inputName = TextFormField(
       controller: _cName,
       autofocus: true,
       keyboardType: TextInputType.text,
@@ -49,7 +42,7 @@ class _ContactEditPageState extends State<ContactEditPage> {
       },
     );
 
-    final inputNickName = TextFormField(
+    TextFormField inputNickName = TextFormField(
       controller: _cNickName,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -58,7 +51,7 @@ class _ContactEditPageState extends State<ContactEditPage> {
       ),
     );
 
-    final inputWork = TextFormField(
+    TextFormField inputWork = TextFormField(
       controller: _cWork,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -67,9 +60,9 @@ class _ContactEditPageState extends State<ContactEditPage> {
       ),
     );
 
-    final inputPhoneNumber = new MaskedTextField(
+    MaskedTextField inputPhoneNumber = new MaskedTextField(
       maskedTextFieldController: _cPhoneNumber,
-      mask: "(xxx) xxxxx.xxxx",
+      mask: "(xxx) xxxxx-xxxx",
       maxLength: 16,
       keyboardType: TextInputType.phone,
       inputDecoration: new InputDecoration(
@@ -78,7 +71,7 @@ class _ContactEditPageState extends State<ContactEditPage> {
       ),
     );
 
-    final inputEmail = TextFormField(
+    TextFormField inputEmail = TextFormField(
       controller: _cEmail,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
@@ -87,7 +80,7 @@ class _ContactEditPageState extends State<ContactEditPage> {
       ),
     );
 
-    final inputWebSite = TextFormField(
+    TextFormField inputWebSite = TextFormField(
       controller: _cWebSite,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
@@ -112,24 +105,22 @@ class _ContactEditPageState extends State<ContactEditPage> {
       ],
     );
 
-    Column content = Column(
+    ListView content = ListView(
+      padding: EdgeInsets.all(20),
       children: <Widget>[
         SizedBox(height: 20),
         picture,
-        Expanded(
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              padding: EdgeInsets.all(20),
-              children: <Widget>[
-                inputName,
-                inputNickName,
-                inputWork,
-                inputPhoneNumber,
-                inputEmail,
-                inputWebSite,
-              ],
-            ),
+        Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              inputName,
+              inputNickName,
+              inputWork,
+              inputPhoneNumber,
+              inputEmail,
+              inputWebSite,
+            ],
           ),
         ),
       ],
@@ -141,7 +132,6 @@ class _ContactEditPageState extends State<ContactEditPage> {
           icon: Icon(Icons.close),
           onPressed: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushReplacementNamed(HomePage.tag);
           },
         ),
         title: Text("Criar novo contato"),
@@ -155,19 +145,17 @@ class _ContactEditPageState extends State<ContactEditPage> {
               ),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
-                  ModelContact contact = ModelContact();
-                  contact.update(
-                    {
-                      'name': _cName.text,
-                      'nickName': _cNickName.text,
-                      'work': _cWork.text,
-                      'phoneNumber': _cPhoneNumber.text,
-                      'email': _cEmail.text,
-                      'webSite': _cWebSite.text,
-                    },
-                    ContactEditPage.contact['id'],
-                  ).then((saved) {
-                    Navigator.of(context).pushReplacementNamed(HomePage.tag);
+                  contactRepository.insert({
+                    'name': _cName.text,
+                    'nickName': _cNickName.text,
+                    'work': _cWork.text,
+                    'phoneNumber': _cPhoneNumber.text,
+                    'email': _cEmail.text,
+                    'webSite': _cWebSite.text,
+                    'created': DateTime.now().toString()
+                  }).then((saved) {
+                    bloc.getListContact();
+                    Navigator.of(context).pop();
                   });
                 }
               },

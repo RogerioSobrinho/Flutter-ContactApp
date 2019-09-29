@@ -1,4 +1,4 @@
-name: contacts
+name: exemplo
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -17,18 +17,22 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  dio: ^3.0.2
+  rxdart: ^0.22.2
+  bloc_pattern: ^2.3.3
   sqflite: #lasted version
   intl: #lasted version
   url_launcher: #lasted version
   font_awesome_flutter: #lasted version
   share: 
   masked_text: ^0.0.6
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

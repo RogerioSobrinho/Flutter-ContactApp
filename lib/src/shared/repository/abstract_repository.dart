@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:sqflite/sqflite.dart';
-import 'package:contacts/application.dart';
+import '../../../application.dart';
 
-abstract class AbstractModel {
+abstract class AbstractRepository {
   Database _db;
   String get dbname;
   int get dbversion;
