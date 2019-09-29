@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'dart:async';
 import 'package:exemplo/src/home/home_bloc.dart';
 import 'package:exemplo/src/home/home_module.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_appavailability/flutter_appavailability.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:flutter_launch/flutter_launch.dart';
 import 'edit_page.dart';
 
 class ViewPage extends StatefulWidget {
@@ -15,16 +20,36 @@ class ViewPage extends StatefulWidget {
 class _ViewPageState extends State<ViewPage> {
   static String defaultMessage = "Não informado";
   final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
+  bool existWhatsapp = false;
+
+  Future<void> getApps() async {
+    try {
+      if (Platform.isAndroid) {
+        await AppAvailability.checkAvailability("com.whatsapp");
+      } else if (Platform.isIOS) {
+        await AppAvailability.checkAvailability("whatsapp://");
+      }
+      setState(() {
+        this.existWhatsapp = true;
+      });
+    } catch (err) {
+      setState(() {
+        this.existWhatsapp = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    getApps();
     ListView content(context, Map snapshot) {
       return ListView(
         children: <Widget>[
           Column(
             children: <Widget>[
               buildHeader(context, snapshot['name']),
-              buildInformation(snapshot['phoneNumber'], snapshot['email']),
+              buildInformation(
+                  snapshot['phoneNumber'], snapshot['email'], snapshot['name']),
             ],
           )
         ],
@@ -73,6 +98,10 @@ class _ViewPageState extends State<ViewPage> {
         },
       ),
     );
+  }
+
+  void whatsAppOpen(phoneNumber, message) async {
+    await FlutterLaunch.launchWathsApp(phone: phoneNumber, message: message);
   }
 
   _textMe(String number) async {
@@ -131,7 +160,7 @@ class _ViewPageState extends State<ViewPage> {
     );
   }
 
-  Padding buildInformation(phoneNumber, email) {
+  Padding buildInformation(phoneNumber, email, nome) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -161,13 +190,16 @@ class _ViewPageState extends State<ViewPage> {
               ),
               leading: IconButton(
                 icon: Icon(Icons.phone, color: Colors.indigo),
-                onPressed: () {},
+                onPressed: () {
+                  _launchCaller(phoneNumber);
+                },
               ),
               trailing: IconButton(
                 icon: Icon(Icons.message),
-                onPressed: () {},
+                onPressed: () {
+                  _textMe(phoneNumber);
+                },
               ),
-              onTap: () {},
             ),
             ListTile(
               title: Text(email.toString().isNotEmpty ? email : defaultMessage),
@@ -178,7 +210,6 @@ class _ViewPageState extends State<ViewPage> {
               leading: IconButton(
                   icon: Icon(Icons.email, color: Colors.indigo),
                   onPressed: () {}),
-              onTap: () {},
             ),
             ListTile(
               title: Text(
@@ -190,9 +221,30 @@ class _ViewPageState extends State<ViewPage> {
               ),
               leading: IconButton(
                   icon: Icon(Icons.share, color: Colors.indigo),
-                  onPressed: () {}),
-              onTap: () {},
+                  onPressed: () {
+                    Share.share("""
+                      Nome: $nome
+                      Tel: $phoneNumber
+                    """);
+                  }),
             ),
+            existWhatsapp
+                ? ListTile(
+                    title: Text(
+                      "Abrir no Whatsapp",
+                    ),
+                    subtitle: Text(
+                      "Whatsapp",
+                      style: TextStyle(color: Colors.black54),
+                    ),
+                    leading: IconButton(
+                        icon: Icon(FontAwesomeIcons.whatsapp,
+                            color: Colors.indigo),
+                        onPressed: () {
+                          whatsAppOpen(phoneNumber.toString(), "");
+                        }),
+                  )
+                : ListTile(),
           ],
         ),
       ),
