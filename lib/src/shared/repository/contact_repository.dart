@@ -56,11 +56,29 @@ class ContactRepository extends AbstractRepository with Disposable {
     return items;
   }
 
-  @override
-  Future<bool> update(Map<String, dynamic> values, where) async {
+  Future<List<Map>> search(dynamic value) async {
     Database db = await this.getDb();
-    int rows = await db
-        .update('contacts', values, where: 'id = ?', whereArgs: [where]);
+    List<Map> items = await db.rawQuery("""SELECT 
+              * 
+           FROM 
+              contacts 
+           WHERE 
+              name LIKE '%$value%' or 
+              nickName LIKE '%$value%' or 
+              phoneNumber LIKE'%$value%' or 
+              work LIKE'%$value%' or 
+              email LIKE '%$value%'
+            ORDER BY name
+        """);
+
+    return items;
+  }
+
+  @override
+  Future<bool> update(Map<String, dynamic> values, id) async {
+    Database db = await this.getDb();
+    int rows =
+        await db.update('contacts', values, where: 'id = ?', whereArgs: [id]);
     return (rows != 0);
   }
 
