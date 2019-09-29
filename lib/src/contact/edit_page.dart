@@ -3,6 +3,7 @@ import 'package:exemplo/src/home/home_bloc.dart';
 import 'package:exemplo/src/home/home_module.dart';
 import 'package:exemplo/src/shared/repository/contact_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:masked_text/masked_text.dart';
 
 class EditPage extends StatefulWidget {
@@ -27,6 +28,9 @@ class _EditPageState extends State<EditPage> {
   Widget build(BuildContext context) {
     TextFormField inputName = TextFormField(
       controller: _cName,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(45),
+      ],
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Nome',
@@ -42,6 +46,9 @@ class _EditPageState extends State<EditPage> {
 
     TextFormField inputNickName = TextFormField(
       controller: _cNickName,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(25),
+      ],
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Apelido',
@@ -51,6 +58,9 @@ class _EditPageState extends State<EditPage> {
 
     TextFormField inputWork = TextFormField(
       controller: _cWork,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(45),
+      ],
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Trabalho',
@@ -71,6 +81,9 @@ class _EditPageState extends State<EditPage> {
 
     TextFormField inputEmail = TextFormField(
       controller: _cEmail,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50),
+      ],
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: 'E-mail',
@@ -80,6 +93,9 @@ class _EditPageState extends State<EditPage> {
 
     TextFormField inputWebSite = TextFormField(
       controller: _cWebSite,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(50),
+      ],
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: 'Site da Web',
