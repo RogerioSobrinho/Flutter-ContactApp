@@ -1,13 +1,9 @@
-// import 'package:contacts/pages/about/about.dart';
-// import 'package:contacts/pages/contact/contact-add.dart';
-// import 'package:contacts/pages/contact/contact-view.dart';
-// import 'package:contacts/pages/home/homeBloc.dart';
 import 'package:exemplo/src/about/about_page.dart';
 import 'package:exemplo/src/contact/add_page.dart';
+import 'package:exemplo/src/contact/edit_page.dart';
 import 'package:exemplo/src/contact/view_page.dart';
 import 'package:exemplo/src/home/home_bloc.dart';
 import 'package:exemplo/src/home/home_module.dart';
-import 'package:exemplo/src/shared/models/contact.dart';
 import 'package:flutter/material.dart';
 
 class ContactList extends StatefulWidget {
@@ -82,6 +78,33 @@ class _ContactListState extends State<ContactList> {
     );
   }
 
+  void _showDialog(item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Deseja excluir o contato?"),
+          content: new Text(item['name']),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Cancelar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Sim"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                bloc.deleteContact(item['id']);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final RenderBox overlay = Overlay.of(context).context.findRenderObject();
@@ -101,10 +124,32 @@ class _ContactListState extends State<ContactList> {
               context: context,
               items: [
                 PopupMenuItem(
-                  child: Text("Editar"),
+                  child: FlatButton(
+                    child: Text(
+                      "Editar",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    onPressed: () {
+                      bloc.setContact(item);
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditPage()),
+                      );
+                    },
+                  ),
                 ),
                 PopupMenuItem(
-                  child: Text("Excluir"),
+                  child: FlatButton(
+                    child: Text(
+                      "Excluir",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      _showDialog(item);
+                    },
+                  ),
                 ),
               ],
               position: RelativeRect.fromRect(
