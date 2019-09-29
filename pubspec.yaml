@@ -26,6 +26,8 @@ dependencies:
   font_awesome_flutter: #lasted version
   share: 
   masked_text: ^0.0.6
+  flutter_launch: "^0.2.0"
+  flutter_appavailability: ^0.0.21
   flutter:
     sdk: flutter
 
