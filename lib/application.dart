@@ -11,6 +11,7 @@ List<String> dbCreate = [
     phoneNumber TEXT,
     email TEXT,
     webSite TEXT,
+    favorite INTEGER,
     created TEXT
   )""",
 ];

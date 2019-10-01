@@ -13,7 +13,9 @@ class HomeBloc extends BlocBase {
   Map contact;
   bool searchButton = false;
   bool showSearch = false;
+  bool favorite = false;
 
+  BehaviorSubject<bool> _favoriteController;
   BehaviorSubject<List<Map>> _listContactController;
   BehaviorSubject<Map> _contactController;
   BehaviorSubject<bool> _searchButtonController;
@@ -24,6 +26,7 @@ class HomeBloc extends BlocBase {
     _contactController = BehaviorSubject.seeded(contact);
     _searchButtonController = BehaviorSubject.seeded(searchButton);
     _searchController = BehaviorSubject.seeded(showSearch);
+    _favoriteController = BehaviorSubject.seeded(favorite);
     getListContact();
   }
 
@@ -31,6 +34,16 @@ class HomeBloc extends BlocBase {
   Observable<bool> get buttonSearchOut => _searchButtonController.stream;
   Observable<Map> get contactOut => _contactController.stream;
   Observable<List<Map>> get listContactOut => _listContactController.stream;
+  Observable<bool> get favoriteOut => _favoriteController.stream;
+
+  setFavorite(bool favorite) async {
+    _favoriteController.add(favorite);
+  }
+
+  updateFavorite(int id, bool favorite) async {
+    await contactRepository.update({"favorite": favorite ? 1 : 0}, id);
+    _favoriteController.add(favorite);
+  }
 
   getListContact() async {
     _listContactController.add(await contactRepository.list());
@@ -59,6 +72,7 @@ class HomeBloc extends BlocBase {
     _listContactController.close();
     _contactController.close();
     _searchController.close();
+    _favoriteController.close();
     super.dispose();
   }
 }

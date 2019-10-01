@@ -12,12 +12,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
+  HomeBloc bloc;
   Widget appBarTitle = new Text("Contatos");
   Icon actionIcon = new Icon(Icons.search);
   Color color = Colors.indigo;
   bool searching = false;
-  final TextEditingController _cSearch = TextEditingController();
+  final _cSearch = TextEditingController();
+
+  @override
+  void initState() {
+    bloc = HomeModule.to.getBloc<HomeBloc>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

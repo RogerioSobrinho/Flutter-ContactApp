@@ -9,20 +9,34 @@ import 'package:masked_text/masked_text.dart';
 class EditPage extends StatefulWidget {
   static String tag = 'edit-page';
   static Map contact;
+
   @override
   _EditPageState createState() => _EditPageState();
 }
 
 class _EditPageState extends State<EditPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _cName = TextEditingController();
-  final TextEditingController _cNickName = TextEditingController();
-  final TextEditingController _cWork = TextEditingController();
-  final TextEditingController _cPhoneNumber = TextEditingController();
-  final TextEditingController _cEmail = TextEditingController();
-  final TextEditingController _cWebSite = TextEditingController();
-  final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
-  final contactRepository = AppModule.to.getDependency<ContactRepository>();
+  final _formKey = GlobalKey<FormState>();
+  final _cName = TextEditingController();
+  final _cNickName = TextEditingController();
+  final _cWork = TextEditingController();
+  final _cPhoneNumber = TextEditingController();
+  final _cEmail = TextEditingController();
+  final _cWebSite = TextEditingController();
+  HomeBloc bloc;
+  ContactRepository contactRepository;
+
+  @override
+  void initState() {
+    bloc = HomeModule.to.getBloc<HomeBloc>();
+    contactRepository = AppModule.to.getDependency<ContactRepository>();
+    _cName.text = EditPage.contact['name'];
+    _cNickName.text = EditPage.contact['nickName'];
+    _cWork.text = EditPage.contact['work'];
+    _cPhoneNumber.text = EditPage.contact['phoneNumber'];
+    _cEmail.text = EditPage.contact['email'];
+    _cWebSite.text = EditPage.contact['webSite'];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,99 +133,76 @@ class _EditPageState extends State<EditPage> {
       ],
     );
 
-    ListView content() {
-      return ListView(
-        padding: EdgeInsets.all(20),
-        children: <Widget>[
-          SizedBox(height: 20),
-          picture,
-          Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                inputName,
-                inputNickName,
-                inputWork,
-                inputPhoneNumber,
-                inputEmail,
-                inputWebSite,
-              ],
-            ),
-          )
-        ],
-      );
-    }
+    ListView body = ListView(
+      padding: EdgeInsets.all(20),
+      children: <Widget>[
+        SizedBox(height: 20),
+        picture,
+        Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              inputName,
+              inputNickName,
+              inputWork,
+              inputPhoneNumber,
+              inputEmail,
+              inputWebSite,
+            ],
+          ),
+        )
+      ],
+    );
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: Text("Editar contato"),
-        actions: <Widget>[
-          Container(
-            width: 80,
-            child: IconButton(
-              icon: Text(
-                'SALVAR',
-                style: TextStyle(fontWeight: FontWeight.bold),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          title: Text("Editar contato"),
+          actions: <Widget>[
+            Container(
+              width: 80,
+              child: IconButton(
+                icon: Text(
+                  'SALVAR',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    contactRepository.update(
+                      {
+                        'name': _cName.text,
+                        'nickName': _cNickName.text,
+                        'work': _cWork.text,
+                        'phoneNumber': _cPhoneNumber.text,
+                        'email': _cEmail.text,
+                        'webSite': _cWebSite.text,
+                      },
+                      EditPage.contact['id'],
+                    ).then((saved) {
+                      Map contact = {
+                        'name': _cName.text,
+                        'nickName': _cNickName.text,
+                        'work': _cWork.text,
+                        'phoneNumber': _cPhoneNumber.text,
+                        'email': _cEmail.text,
+                        'favorite': EditPage.contact['favorite'],
+                        'webSite': _cWebSite.text,
+                      };
+                      bloc.setContact(contact);
+                      Navigator.of(context).pop();
+                    });
+                  }
+                },
               ),
-              onPressed: () {
-                if (_formKey.currentState.validate()) {
-                  contactRepository.update(
-                    {
-                      'name': _cName.text,
-                      'nickName': _cNickName.text,
-                      'work': _cWork.text,
-                      'phoneNumber': _cPhoneNumber.text,
-                      'email': _cEmail.text,
-                      'webSite': _cWebSite.text,
-                    },
-                    EditPage.contact['id'],
-                  ).then((saved) {
-                    Map contact = {
-                      'name': _cName.text,
-                      'nickName': _cNickName.text,
-                      'work': _cWork.text,
-                      'phoneNumber': _cPhoneNumber.text,
-                      'email': _cEmail.text,
-                      'webSite': _cWebSite.text,
-                    };
-                    bloc.setContact(contact);
-                    Navigator.of(context).pop();
-                  });
-                }
-              },
-            ),
-          )
-        ],
-      ),
-      body: StreamBuilder(
-        stream: bloc.contactOut,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            print(snapshot.error);
-            return Text('Error: ${snapshot.error}');
-          } else {
-            EditPage.contact = snapshot.data;
-            _cName.text = EditPage.contact['name'];
-            _cNickName.text = EditPage.contact['nickName'];
-            _cWork.text = EditPage.contact['work'];
-            _cPhoneNumber.text = EditPage.contact['phoneNumber'];
-            _cEmail.text = EditPage.contact['email'];
-            _cWebSite.text = EditPage.contact['webSite'];
-            return content();
-          }
-        },
-      ),
-    );
+            )
+          ],
+        ),
+        body: body);
   }
 }

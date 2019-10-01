@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_launch/flutter_launch.dart';
+
 import 'edit_page.dart';
 
 class ViewPage extends StatefulWidget {
@@ -19,8 +20,19 @@ class ViewPage extends StatefulWidget {
 
 class _ViewPageState extends State<ViewPage> {
   static String defaultMessage = "Não informado";
-  final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
+
   bool existWhatsapp = false;
+  Map contact;
+
+  HomeBloc blocHome;
+  // final eeee = ViewModule.to
+  //     .getBloc<ViewBloc>(); (??) problem using two bloc import! What????
+
+  @override
+  void initState() {
+    blocHome = HomeModule.to.getBloc<HomeBloc>();
+    super.initState();
+  }
 
   Future<void> getApps() async {
     try {
@@ -29,13 +41,9 @@ class _ViewPageState extends State<ViewPage> {
       } else if (Platform.isIOS) {
         await AppAvailability.checkAvailability("whatsapp://");
       }
-      setState(() {
-        this.existWhatsapp = true;
-      });
+      this.existWhatsapp = true;
     } catch (err) {
-      setState(() {
-        this.existWhatsapp = false;
-      });
+      this.existWhatsapp = false;
     }
   }
 
@@ -57,33 +65,56 @@ class _ViewPageState extends State<ViewPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        actions: <Widget>[
-          IconButton(
-            color: Colors.white,
-            icon: Icon(Icons.star),
-            onPressed: () {},
-          ),
-          IconButton(
-            color: Colors.white,
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditPage()),
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, kToolbarHeight),
+        child: StreamBuilder(
+          stream: blocHome.favoriteOut,
+          builder: (conext, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              print(snapshot.error);
+              return Text('Error: ${snapshot.error}');
+            } else {
+              return AppBar(
+                elevation: 0,
+                actions: <Widget>[
+                  IconButton(
+                    color: Colors.white,
+                    icon: snapshot.data
+                        ? Icon(Icons.star)
+                        : Icon(Icons.star_border),
+                    onPressed: () {
+                      blocHome.updateFavorite(
+                          this.contact['id'], !snapshot.data);
+                    },
+                  ),
+                  IconButton(
+                    color: Colors.white,
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      EditPage.contact = this.contact;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EditPage()),
+                      );
+                    },
+                  ),
+                  // IconButton(
+                  //   color: Colors.white,
+                  //   icon: Icon(Icons.more_vert),
+                  //   onPressed: () {},
+                  // ),
+                ],
               );
-            },
-          ),
-          IconButton(
-            color: Colors.white,
-            icon: Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
+            }
+          },
+        ),
       ),
       body: StreamBuilder(
-        stream: bloc.contactOut,
+        stream: blocHome.contactOut,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
@@ -93,6 +124,8 @@ class _ViewPageState extends State<ViewPage> {
             print(snapshot.error);
             return Text('Error: ${snapshot.error}');
           } else {
+            this.contact = snapshot.data;
+            blocHome.setFavorite(snapshot.data['favorite'] == 1);
             return content(context, snapshot.data);
           }
         },
@@ -163,24 +196,10 @@ class _ViewPageState extends State<ViewPage> {
   Padding buildInformation(phoneNumber, email, nome) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 1, // has the effect of softening the shadow
-              spreadRadius: 1, // has the effect of extending the shadow
-              offset: Offset(
-                1, // horizontal, move right 10
-                1, // vertical, move down 10
-              ),
-            ),
-          ],
-        ),
-        child: Column(
-          children: <Widget>[
-            ListTile(
+      child: Column(
+        children: <Widget>[
+          Card(
+            child: ListTile(
               title: Text(phoneNumber.toString().isNotEmpty
                   ? phoneNumber
                   : defaultMessage),
@@ -201,7 +220,9 @@ class _ViewPageState extends State<ViewPage> {
                 },
               ),
             ),
-            ListTile(
+          ),
+          Card(
+            child: ListTile(
               title: Text(email.toString().isNotEmpty ? email : defaultMessage),
               subtitle: Text(
                 "E-mail",
@@ -211,7 +232,9 @@ class _ViewPageState extends State<ViewPage> {
                   icon: Icon(Icons.email, color: Colors.indigo),
                   onPressed: () {}),
             ),
-            ListTile(
+          ),
+          Card(
+            child: ListTile(
               title: Text(
                 "Enviar contato",
               ),
@@ -223,12 +246,14 @@ class _ViewPageState extends State<ViewPage> {
                   icon: Icon(Icons.share, color: Colors.indigo),
                   onPressed: () {
                     Share.share("""
-                      Nome: $nome
-                      Tel: $phoneNumber
-                    """);
+                        Nome: $nome
+                        Tel: $phoneNumber
+                      """);
                   }),
             ),
-            existWhatsapp
+          ),
+          Card(
+            child: existWhatsapp
                 ? ListTile(
                     title: Text(
                       "Abrir no Whatsapp",
@@ -244,9 +269,9 @@ class _ViewPageState extends State<ViewPage> {
                           whatsAppOpen(phoneNumber.toString(), "");
                         }),
                   )
-                : ListTile(),
-          ],
-        ),
+                : Container(),
+          ),
+        ],
       ),
     );
   }

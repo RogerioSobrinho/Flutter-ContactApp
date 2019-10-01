@@ -14,16 +14,22 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _cName = TextEditingController();
-  final TextEditingController _cNickName = TextEditingController();
-  final TextEditingController _cWork = TextEditingController();
-  final TextEditingController _cPhoneNumber = TextEditingController();
-  final TextEditingController _cEmail = TextEditingController();
-  final TextEditingController _cWebSite = TextEditingController();
-  final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
-  final contactRepository =
-      AppModule.to.getDependency<ContactRepository>(); //pega a injeção do BLoC
+  final _formKey = GlobalKey<FormState>();
+  final _cName = TextEditingController();
+  final _cNickName = TextEditingController();
+  final _cWork = TextEditingController();
+  final _cPhoneNumber = TextEditingController();
+  final _cEmail = TextEditingController();
+  final _cWebSite = TextEditingController();
+  HomeBloc bloc;
+  ContactRepository contactRepository;
+
+  @override
+  void initState() {
+    bloc = HomeModule.to.getBloc<HomeBloc>();
+    contactRepository = AppModule.to.getDependency<ContactRepository>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +174,7 @@ class _AddPageState extends State<AddPage> {
                     'phoneNumber': _cPhoneNumber.text,
                     'email': _cEmail.text,
                     'webSite': _cWebSite.text,
+                    'favorite': 0,
                     'created': DateTime.now().toString()
                   }).then((saved) {
                     bloc.getListContact();

@@ -16,7 +16,13 @@ class ContactList extends StatefulWidget {
 
 class _ContactListState extends State<ContactList> {
   Offset _tapPosition;
-  final bloc = HomeModule.to.getBloc<HomeBloc>(); //pega a injeção do BLoC
+  HomeBloc bloc;
+
+  @override
+  void initState() {
+    bloc = HomeModule.to.getBloc<HomeBloc>();
+    super.initState();
+  }
 
   void _onTapDown(TapDownDetails details) {
     _tapPosition = details.globalPosition;
@@ -168,6 +174,9 @@ class _ContactListState extends State<ContactList> {
                   style: TextStyle(fontSize: 26, color: Colors.white60),
                 ),
               ),
+              trailing: item['favorite'] == 1
+                  ? Icon(Icons.star, color: Colors.indigo)
+                  : Icon(Icons.star_border),
               title: Text(
                 item['name'],
                 style: TextStyle(fontSize: 17),
