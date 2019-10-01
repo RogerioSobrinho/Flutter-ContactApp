@@ -12,7 +12,3 @@
 
 A Flutter project with implementation for Android and iOS.
 
-# Note
-
-* This project is still under development.
-
